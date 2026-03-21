@@ -1,7 +1,11 @@
 import os
+import logging
 from flask import Flask, request
 from twilio.twiml.messaging_response import MessagingResponse
 from google import genai
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
@@ -14,7 +18,7 @@ def webhook():
     incoming_msg = request.values.get("Body", "").strip()
     sender = request.values.get("From", "")
 
-    print("Received message: " + incoming_msg)
+    logger.info("Received: " + incoming_msg)
 
     if sender not in chat_history:
         chat_history[sender] = []
@@ -30,7 +34,7 @@ def webhook():
             contents=chat_history[sender]
         )
         reply_text = response.text
-        print("Gemini reply: " + reply_text)
+        logger.info("Reply: " + reply_text)
 
         chat_history[sender].append({
             "role": "model",
@@ -42,7 +46,7 @@ def webhook():
 
     except Exception as e:
         reply_text = "Error: " + str(e)
-        print("Error: " + str(e))
+        logger.error("Error: " + str(e))
 
     resp = MessagingResponse()
     resp.message(reply_text)
