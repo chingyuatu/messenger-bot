@@ -74,7 +74,7 @@ def webhook():
     return "OK", 200
 
 def send_message(recipient_id, text):
-    url = f"https://graph.facebook.com/v18.0/me/messages?access_token={PAGE_ACCESS_TOKEN}"
+    url = "https://graph.facebook.com/v18.0/me/messages?access_token=" + PAGE_ACCESS_TOKEN
     payload = {
         "recipient": {"id": recipient_id},
         "message": {"text": text}
