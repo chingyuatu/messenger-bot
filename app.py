@@ -83,6 +83,11 @@ def send_message(recipient_id, text):
     response = requests.post(url, json=payload)
     logger.info("Sent: " + str(response.json()))
 
+@app.route("/privacy", methods=["GET"])
+def privacy():
+    with open("privacy.html", "r") as f:
+        return f.read()
+
 @app.route("/", methods=["GET"])
 def index():
     return "Messenger Bot is running!"
